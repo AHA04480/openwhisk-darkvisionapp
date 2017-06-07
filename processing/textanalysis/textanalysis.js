@@ -64,7 +64,12 @@ function mainImpl(args, mainCallback) {
         const fullText = audio.transcript.results.reduce((text, transcript) =>
           `${text}${transcript.alternatives[0].transcript}. `
         , '');
-        processTranscript(args, fullText, (err, analysis) => {
+        translateTranscript(fullText, (err, result) => {
+          callback(err, audio, result);
+        });
+      },
+      (audio, translation_result, callback) => {
+        processTranscript(args, translation_result.translations[0].translation, (err, analysis) => {
           callback(err, audio, analysis);
         });
       },
@@ -141,5 +146,41 @@ function processTranscript(args, text, processCallback) {
     },
   ], (err) => {
     processCallback(err, analysis);
+  });
+}
+
+function translateTranscript(text, processCallback){
+  const async = require('async');
+  const result = {};
+  async.parallel([
+    // language_translator
+    (callback) => {
+      const request = require('request');
+      request({
+        url: `${args.languageTranslatorUrl}/v2/translate`,
+        method: 'POST',
+        json: true,
+        body: {
+          {
+            text: text,
+            source: 'ja',
+            target: 'en'
+          }
+        },
+        auth: {
+          username: args.languageTranslatorUsername,
+          password: args.languageTranslatorPassword
+        },
+      }, (err, response, body) => {
+        if (err) {
+          console.log('Language Translator', err);
+        } else {
+          result.translations = body.translations;
+        }
+        callback(null);
+      });
+    },
+  ], (err) => {
+    processCallback(err, result);
   });
 }

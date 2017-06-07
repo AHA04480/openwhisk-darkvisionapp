@@ -75,6 +75,16 @@ export NLU_USERNAME=`echo $NLU_CREDENTIALS | jq -r .username`
 export NLU_PASSWORD=`echo $NLU_CREDENTIALS | jq -r .password`
 export NLU_URL=`echo $NLU_CREDENTIALS | jq -r .url`
 
+# Create Watson Language Translator
+figlet -f small 'Language Translator'
+cf create-service language_translator lite language-translator-for-darkvision
+cf create-service-key language-translator-for-darkvision for-darkvision
+
+LANGUAGE_TRANSLATOR_CREDENTIALS=`cf service-key language-translator-for-darkvision for-darkvision | tail -n +2`
+export LANGUAGE_TRANSLATOR_USERNAME=`echo $LANGUAGE_TRANSLATOR_CREDENTIALS | jq -r .username`
+export LANGUAGE_TRANSLATOR_PASSWORD=`echo $LANGUAGE_TRANSLATOR_CREDENTIALS | jq -r .password`
+export LANGUAGE_TRANSLATOR_URL=`echo $LANGUAGE_TRANSLATOR_CREDENTIALS | jq -r .url`
+
 # Docker image should be set by the pipeline, use a default if not set
 if [ -z "$DOCKER_EXTRACTOR_NAME" ]; then
   echo 'DOCKER_EXTRACTOR_NAME was not set in the pipeline. Using default value.'
