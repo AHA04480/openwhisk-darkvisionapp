@@ -161,11 +161,9 @@ function translateTranscript(text, processCallback){
         method: 'POST',
         json: true,
         body: {
-          {
             text: text,
             source: 'ja',
             target: 'en'
-          }
         },
         auth: {
           username: args.languageTranslatorUsername,
