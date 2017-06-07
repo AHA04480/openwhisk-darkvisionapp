@@ -64,7 +64,7 @@ function mainImpl(args, mainCallback) {
         const fullText = audio.transcript.results.reduce((text, transcript) =>
           `${text}${transcript.alternatives[0].transcript}. `
         , '');
-        translateTranscript(fullText, (err, result) => {
+        translateTranscript(args, fullText, (err, result) => {
           callback(err, audio, result);
         });
       },
@@ -149,7 +149,7 @@ function processTranscript(args, text, processCallback) {
   });
 }
 
-function translateTranscript(text, processCallback){
+function translateTranscript(args, text, processCallback){
   const async = require('async');
   const result = {};
   async.parallel([
