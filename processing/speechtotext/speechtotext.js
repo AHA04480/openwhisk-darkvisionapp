@@ -230,7 +230,7 @@ function submitSpeechToTextRequest(
   if (audio.language_model) {
     apiUrl += `&model=${audio.language_model}`;
     if (audio.language_model == 'ja-JP_BroadbandModel' && customizationId != ''){
-      apiUrl += `&customization_id=${args.sttCustomizationId}`;
+      apiUrl += `&customization_id=${customizationId}`;
     }
   }
   console.log('Submitting', apiUrl);
