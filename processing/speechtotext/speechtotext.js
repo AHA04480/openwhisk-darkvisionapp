@@ -185,7 +185,7 @@ function submitRecognitionImpl(args, mainCallback) {
       // trigger the analysis on the audio file
       (audio, callback) => {
         submitSpeechToTextRequest(
-          args.sttUrl, args.sttUsername, args.sttPassword, args.sttCallbackUrl,
+          args.sttCustomizationId, args.sttUrl, args.sttUsername, args.sttPassword, args.sttCallbackUrl,
           audio, fileName, (err) => {
             if (err) {
               callback(err);
@@ -216,7 +216,7 @@ function submitRecognitionImpl(args, mainCallback) {
  * processCallback = function(err);
  */
 function submitSpeechToTextRequest(
-  sttUrl, sttUsername, sttPassword, sttCallbackUrl,
+  customizationId, sttUrl, sttUsername, sttPassword, sttCallbackUrl,
   audio, fileName, processCallback) {
   const request = require('request');
   const fs = require('fs');
@@ -229,7 +229,7 @@ function submitSpeechToTextRequest(
   apiUrl += '&results_ttl=5'; // delete results from Watson STT after 5min
   if (audio.language_model) {
     apiUrl += `&model=${audio.language_model}`;
-    if (audio.language_model == 'ja-JP_BroadbandModel' && args.sttCustomizationId != ''){
+    if (audio.language_model == 'ja-JP_BroadbandModel' && customizationId != ''){
       apiUrl += `&customization_id=${args.sttCustomizationId}`;
     }
   }
