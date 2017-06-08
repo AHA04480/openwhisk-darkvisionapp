@@ -254,7 +254,7 @@ function analyzeImage(args, fileName, analyzeCallback) {
           } else if (body.images && body.images.length > 0) {
             analysis.image_keywords = [];
             for (var i=0; i<body.images[0].classifiers.length; i++){
-              analysis.image_keywords.push(body.images[0].classifiers[i].classes);
+              analysis.image_keywords = analysis.image_keywords.concat(body.images[0].classifiers[i].classes);
             }
           }
           callback(null);
