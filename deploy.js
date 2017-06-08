@@ -19,6 +19,7 @@ const path = require('path');
 const openwhisk = require('openwhisk');
 const async = require('async');
 const request = require('request');
+const settings = require('./settings.json');
 
 const argv = require('yargs')
   .command('install', 'Install OpenWhisk actions')
@@ -127,20 +128,7 @@ function registerCallback() {
 
 function install(ow) {
   WARN('Installing artifacts...');
-  const stt_customization_id = {};
   waterfall([
-    (callback) => {
-      getSttCustomModels((err,result) => {
-        if (err){
-          callback(err);
-        }else{
-          for (var i=0; i<result.customizations.length; i++){
-            stt_customization_id[result.customizations[i].base_model_name] = result.customizations[i].customization_id;
-          }
-          callback();
-        }
-      });
-    },
     //   wsk package create vision
     (callback) => {
       call(ow, 'package', 'create', 'vision', callback);
@@ -165,7 +153,7 @@ function install(ow) {
         sttPassword: process.env.STT_PASSWORD,
         sttCallbackSecret: process.env.STT_CALLBACK_SECRET,
         sttCallbackUrl: process.env.STT_CALLBACK_URL,
-        sttCustomizationId: stt_customization_id['ja-JP_BroadbandModel'] || '',
+        sttCustomizationId: settings.stt_customization_ids['ja-JP_BroadbandModel'] || '',
         nluUrl: process.env.NLU_URL,
         nluUsername: process.env.NLU_USERNAME,
         nluPassword: process.env.NLU_PASSWORD,
@@ -437,31 +425,4 @@ function buildZip(files) {
     actionZip.file(filename, fs.readFileSync(files[filename]));
   });
   return actionZip.generate({ base64: true, compression: 'DEFLATE' });
-}
-
-function getSttCustomModels(processCallback){
-  const result = {};
-  async.parallel([
-    // stt
-    (callback) => {
-      const request = require('request');
-      request({
-        url: `${process.env.STT_URL}/v1/customizations`,
-        method: 'GET',
-        auth: {
-          username: process.env.STT_USERNAME,
-          password: process.env.STT_PASSWORD
-        },
-      }, (err, response, body) => {
-        if (err) {
-          DEBUG('Speech To Text Get Custom Models', err);
-        } else {
-          result.customizations = body.customizations;
-        }
-        callback(null);
-      });
-    },
-  ], (err) => {
-    processCallback(err, result);
-  });
 }
