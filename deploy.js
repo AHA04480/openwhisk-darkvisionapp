@@ -440,6 +440,7 @@ function buildZip(files) {
 }
 
 function getSttCustomModels(callback){
+  const result = {};
   async.parallel([
     // stt
     (callback) => {
