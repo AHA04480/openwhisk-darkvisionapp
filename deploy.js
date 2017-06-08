@@ -19,7 +19,6 @@ const path = require('path');
 const openwhisk = require('openwhisk');
 const async = require('async');
 const request = require('request');
-const settings = require('./settings.json');
 
 const argv = require('yargs')
   .command('install', 'Install OpenWhisk actions')
@@ -153,10 +152,11 @@ function install(ow) {
         sttPassword: process.env.STT_PASSWORD,
         sttCallbackSecret: process.env.STT_CALLBACK_SECRET,
         sttCallbackUrl: process.env.STT_CALLBACK_URL,
-        sttCustomizationId: settings.stt_customization_ids['ja-JP_BroadbandModel'] || '',
+        sttCustomizationId: '',
         nluUrl: process.env.NLU_URL,
         nluUsername: process.env.NLU_USERNAME,
         nluPassword: process.env.NLU_PASSWORD,
+        vrClassifierIds: '',
         languageTranslatorUrl: process.env.LANGUAGE_TRANSLATOR_URL,
         languageTranslatorUsername: process.env.LANGUAGE_TRANSLATOR_USERNAME,
         languageTranslatorPassword: process.env.LANGUAGE_TRANSLATOR_PASSWORD,

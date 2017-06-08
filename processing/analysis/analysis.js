@@ -234,6 +234,10 @@ function analyzeImage(args, fileName, analyzeCallback) {
     (callback) => {
       // Call Classify passing the image in the request
       // http://www.ibm.com/watson/developercloud/visual-recognition/api/v3/?curl#classify_an_image
+      let params = {};
+      if (args.vrClassifierIds != ''){
+        params['classifier_ids'] = JSON.parse(args.vrClassifierIds);
+      }
       fs.createReadStream(fileName).pipe(
         request({
           method: 'POST',
@@ -243,6 +247,7 @@ function analyzeImage(args, fileName, analyzeCallback) {
           headers: {
             'Content-Length': fs.statSync(fileName).size
           },
+          body: params,
           json: true
         }, (err, response, body) => {
           if (err) {
