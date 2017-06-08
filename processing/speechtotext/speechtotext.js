@@ -229,6 +229,9 @@ function submitSpeechToTextRequest(
   apiUrl += '&results_ttl=5'; // delete results from Watson STT after 5min
   if (audio.language_model) {
     apiUrl += `&model=${audio.language_model}`;
+    if (audio.language_model == 'ja-JP_BroadbandModel' && args.sttCustomizationId != ''){
+      apiUrl += `&customization_id=${args.sttCustomizationId}`;
+    }
   }
   console.log('Submitting', apiUrl);
   fs.createReadStream(fileName).pipe(request({
