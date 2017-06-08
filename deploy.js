@@ -439,7 +439,7 @@ function buildZip(files) {
   return actionZip.generate({ base64: true, compression: 'DEFLATE' });
 }
 
-function getSttCustomModels(callback){
+function getSttCustomModels(processCallback){
   const result = {};
   async.parallel([
     // stt
@@ -462,6 +462,6 @@ function getSttCustomModels(callback){
       });
     },
   ], (err) => {
-    callback(err, result);
+    processCallback(err, result);
   });
 }
