@@ -234,11 +234,10 @@ function analyzeImage(args, fileName, analyzeCallback) {
     (callback) => {
       // Call Classify passing the image in the request
       // http://www.ibm.com/watson/developercloud/visual-recognition/api/v3/?curl#classify_an_image
-      let params = {};
+      let formData = {images_file: fs.createReadStream(fileName)};
       if (args.vrClassifierIds != ''){
-        params['classifier_ids'] = JSON.parse(args.vrClassifierIds);
+        formData['classifier_ids'] = JSON.parse(args.vrClassifierIds);
       }
-      fs.createReadStream(fileName).pipe(
         request({
           method: 'POST',
           url: 'https://gateway-a.watsonplatform.net/visual-recognition/api/v3/classify' + // eslint-disable-line
@@ -247,6 +246,7 @@ function analyzeImage(args, fileName, analyzeCallback) {
           headers: {
             'Content-Length': fs.statSync(fileName).size
           },
+          formData: formData,
           body: params,
           json: true
         }, (err, response, body) => {
@@ -256,7 +256,7 @@ function analyzeImage(args, fileName, analyzeCallback) {
             analysis.image_keywords = body.images[0].classifiers[0].classes;
           }
           callback(null);
-        }));
+        });
     }
   ],
   (err) => {
