@@ -368,7 +368,7 @@ app.get('/api/videos/:id', (req, res) => {
               });
             }
             if (image.microsoft_analysis.description.captions){
-              image.microsoft_analysis.description.captions.forEach((caption.text) => {
+              image.microsoft_analysis.description.captions.forEach((caption) => {
                 if (!microsoftCaptionToOccurrences[caption.text]) {
                   microsoftCaptionToOccurrences[caption.text] = [];
                 }
