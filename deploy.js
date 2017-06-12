@@ -160,14 +160,14 @@ function install(ow) {
         languageTranslatorUrl: process.env.LANGUAGE_TRANSLATOR_URL,
         languageTranslatorUsername: process.env.LANGUAGE_TRANSLATOR_USERNAME,
         languageTranslatorPassword: process.env.LANGUAGE_TRANSLATOR_PASSWORD,
+        microsoftComputerVisionUrl: process.env.MICROSOFT_COMPUTER_VISION_URL || '',
+        microsoftComputerVisionKey: process.env.MICROSOFT_COMPUTER_VISION_KEY || '',
         osAuthUrl: process.env.OS_AUTH_URL || '',
         osProjectId: process.env.OS_PROJECT_ID || '',
         osRegion: process.env.OS_REGION || '',
         osUsername: process.env.OS_USERNAME || '',
         osPassword: process.env.OS_PASSWORD || '',
         osDomainId: process.env.OS_DOMAIN_ID || '',
-        microsoftComputerVisionUrl: process.env.MICROSOFT_COMPUTER_VISION_URL,
-        microsoftComputerVisionKey: process.env.MICROSOFT_COMPUTER_VISION_KEY,
       };
       call(ow, 'package', 'update', {
         packageName: 'vision',
