@@ -242,7 +242,7 @@ function install(ow) {
     makeChangeListenerTask(ow, true),
     makeActionTask(ow, 'textanalysis', true),
     makeActionTask(ow, 'analysis', true),
-    makeActionTask(ow, 'microsoft_analysis', true),
+    makeActionTask(ow, 'microsoft-analysis', true),
     makeSpeechToTextTask(ow, true),
     //   wsk rule create vision-rule vision-cloudant-trigger vision-cloudant-changelistener
     (callback) => {

@@ -112,7 +112,7 @@ function onDocumentChange(url, dbName, documentId, documentRev, callback) {
 
     if (doc.type === 'image' && mediaStorage.hasAttachment(doc, 'image.jpg') && !doc.microsoft_analysis) {
       // trigger the microsoft_analysis
-      asyncCallAction('vision/microsoft_analysis', doc, callback);
+      asyncCallAction('vision/microsoft-analysis', doc, callback);
       return;
     }
 
