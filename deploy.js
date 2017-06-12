@@ -336,6 +336,7 @@ function uninstall(ow) {
     callback => call(ow, 'action', 'delete', 'vision/extractor', callback),
     callback => call(ow, 'action', 'delete', 'vision/speechtotext', callback),
     callback => call(ow, 'action', 'delete', 'vision/textanalysis', callback),
+    callback => call(ow, 'action', 'delete', 'vision/microsoft-analysis', callback),
     callback => call(ow, 'rule', 'disable', 'vision-rule', callback),
     callback => call(ow, 'rule', 'delete', 'vision-rule', callback),
     callback => call(ow, 'action', 'delete', 'vision-cloudant-changelistener', callback),
@@ -381,6 +382,7 @@ function update(ow) {
     makeChangeListenerTask(ow, false),
     makeActionTask(ow, 'textanalysis', false),
     makeActionTask(ow, 'analysis', false),
+    makeActionTask(ow, 'microsoft-analysis', false),
     makeSpeechToTextTask(ow, false),
   ]);
 }
