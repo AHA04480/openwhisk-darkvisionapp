@@ -78,11 +78,11 @@
         if (image.microsoft_analysis) {
           switch(tagType){
             case 'microsoft_tags':
-              return image.microsoft_analysis.tags.find(function(tag){
-                return tag.tag === tagName;
+              return image.microsoft_analysis.description.tags.find(function(tag){
+                return tag === tagName;
               });
             case 'microsoft_captions':
-              return image.microsoft_analysis.captions.find(function(caption){
+              return image.microsoft_analysis.description.captions.find(function(caption){
                 return caption.text === tagName;
               });
           }
