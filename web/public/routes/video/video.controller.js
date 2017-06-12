@@ -49,7 +49,10 @@
       console.log('Selecting image', image);
       controller.data.selected = image;
       let selectedImage = image.analysis;
-      selectedImage.microsoft_tags = {"tags": image.microsoft_analysis.description.tags};
+      selectedImage.microsoft_tags = [];
+      for (var i=0;i<image.microsoft_analysis.description.tags.length;i++){
+        selectedImage.microsoft_tags.push({"tag": image.microsoft_analysis.description.tags[i]});
+      }
       selectedImage.microsoft_captions = image.microsoft_analysis.description.captions;
       controller.data.selectedSummary = image.analysis;
     };
