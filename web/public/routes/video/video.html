@@ -224,6 +224,33 @@
                       ng-if="!controller.showMoreKeywords">and {{controller.data.selectedSummary.image_keywords.length - 15}} more...</span><span ng-if="controller.showMoreKeywords">show less</span></li>
               </ul>
             </div>
+            <div>
+              <h4>Microsoft Tags</h4>
+              <ul class="entry-taglist">
+                <li ng-repeat="keyword in controller.data.selectedSummary.microsoft_tags" class="entry-tag"><span
+                        ng-click="controller.selectImageWithTag('microsoft_tags', keyword.tag)"
+                        ng-class="{ 'hidden-tag': $index > 15 && !controller.showMoreKeywords, 'tag-clickable': controller.isVideo() }"
+                        class="tag tag-keyword">{{keyword.tag}}</span></li>
+                <li ng-if="controller.data.selectedSummary.microsoft_tags.length > 15"
+                    class="entry-tag more-tag-toggle"
+                    ng-click="controller.showMoreKeywords = !controller.showMoreKeywords"><span
+                      ng-if="!controller.showMoreKeywords">and {{controller.data.selectedSummary.microsoft_tags.length - 15}} more...</span><span ng-if="controller.showMoreKeywords">show less</span></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4>Microsoft Captions</h4>
+              <ul class="entry-taglist">
+                <li ng-repeat="keyword in controller.data.selectedSummary.microsoft_captions" class="entry-tag"><span
+                        ng-click="controller.selectImageWithTag('microsoft_captions', keyword.caption)"
+                        ng-class="{ 'hidden-tag': $index > 15 && !controller.showMoreKeywords, 'tag-clickable': controller.isVideo() }"
+                        class="tag tag-keyword">{{keyword.text}} {{keyword.confidence | formatPercent}}%</span></li>
+                <li ng-if="controller.data.selectedSummary.microsoft_captions.length > 15"
+                    class="entry-tag more-tag-toggle"
+                    ng-click="controller.showMoreKeywords = !controller.showMoreKeywords"><span
+                      ng-if="!controller.showMoreKeywords">and {{controller.data.selectedSummary.microsoft_captions.length - 15}} more...</span><span ng-if="controller.showMoreKeywords">show less</span></li>
+              </ul>
+            </div>
 
             <div ng-if="controller.isVideo() && controller.data.summary.audio.analysis.nlu.keywords">
               <h4>Audio Keywords</h4>

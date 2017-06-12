@@ -48,6 +48,9 @@
     controller.selectImage = function(image) {
       console.log('Selecting image', image);
       controller.data.selected = image;
+      let selectedImage = image.analysis;
+      selectedImage.microsoft_tags = {"tags": image.microsoft_analysis.description.tags};
+      selectedImage.microsoft_captions = image.microsoft_analysis.description.captions;
       controller.data.selectedSummary = image.analysis;
     };
 
@@ -66,6 +69,18 @@
             case 'image_keywords':
               return image.analysis.image_keywords.find(function(keyword) {
                 return keyword.class === tagName;
+              });
+          }
+        }
+        if (image.microsoft_analysis) {
+          switch(tagType){
+            case 'microsoft_tags':
+              return image.microsoft_analysis.tags.find(function(tag){
+                return tag.tag === tagName;
+              });
+            case 'microsoft_captions':
+              return image.microsoft_analysis.captions.find(function(caption){
+                return caption.text === tagName;
               });
           }
         }

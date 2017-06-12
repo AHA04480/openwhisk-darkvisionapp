@@ -284,6 +284,10 @@ app.get('/api/videos/:id', (req, res) => {
       minimumLabelScore: 0.70,
       minimumLabelScoreOccurrence: 1,
       maximumLabelCount: 5,
+      minimumCaptionOccurrence: 1,
+      minimumCaptionScore: 0.40,
+      minimumCaptionScoreOccurrence: 1,
+      maximumCaptionCount: 5,
       minimumKeywordOccurrence: 1,
       minimumKeywordScore: 0.60,
       minimumKeywordScoreOccurrence: 1,
@@ -320,6 +324,8 @@ app.get('/api/videos/:id', (req, res) => {
         // These maps will be used to decide which tags/faces to keep for the video summary
         let peopleNameToOccurrences = {};
         let keywordToOccurrences = {};
+        let microsoftTagToOccurrences = {};
+        let microsoftCaptionToOccurrences = {};
 
         console.log('Sorting analysis for video', video._id);
         images.forEach((image) => {
@@ -347,6 +353,31 @@ app.get('/api/videos/:id', (req, res) => {
               keyword.image_url = `${req.protocol}://${req.hostname}/images/image/${image._id}.jpg`;
               keyword.timecode = image.frame_timecode;
             });
+          }
+          if (image.microsoft_analysis && image.microsoft_analysis.description){
+            if (image.microsoft_analysis.description.tags){
+              image.microsoft_analysis.description.tags.forEach((tag) => {
+                if (!microsoftTagToOccurrences[tag]) {
+                  microsoftTagToOccurrences[tag] = [];
+                }
+                let tag_obj = {"tag": tag};
+                microsoftTagToOccurrences[tag].push(tag_obj);
+                tag_obj.image_id = image._id;
+                tag_obj.image_url = `${req.protocol}://${req.hostname}/images/image/${image._id}.jpg`;
+                tag_obj.timecode = image.frame_timecode;
+              });
+            }
+            if (image.microsoft_analysis.description.captions){
+              image.microsoft_analysis.description.captions.forEach((caption.text) => {
+                if (!microsoftCaptionToOccurrences[caption.text]) {
+                  microsoftCaptionToOccurrences[caption.text] = [];
+                }
+                microsoftCaptionToOccurrences[caption.text].push(caption);
+                caption.image_id = image._id;
+                caption.image_url = `${req.protocol}://${req.hostname}/images/image/${image._id}.jpg`;
+                caption.timecode = image.frame_timecode;
+              });
+            }
           }
         });
 
@@ -399,6 +430,14 @@ app.get('/api/videos/:id', (req, res) => {
           return result;
         }
 
+        function aggregationOccurrence(occurrences) {
+          const result = [];
+          Object.keys(occurrences).forEach((property) => {
+            result.push(occurrences[property][0]);
+          });
+          return result;
+        }
+
         console.log('Filtering faces for video', video._id);
         peopleNameToOccurrences = filterOccurrences(peopleNameToOccurrences, {
           score: face => face.identity.score,
@@ -419,11 +458,23 @@ app.get('/api/videos/:id', (req, res) => {
         // remove the color tags from the overview, they are not interesting in this context
         keywordToOccurrences = keywordToOccurrences.filter(keyword => !keyword.class.endsWith(' color'));
 
+        microsoftTagToOccurrences = aggregationOccurrence(microsoftTagToOccurrences);
+
+        microsoftCaptionToOccurrences = filterOccurrences(microsoftCaptionToOccurrences, {
+          score: caption => caption.confidence,
+          minimumOccurrence: options.minimumCaptionOccurrence,
+          minimumScore: options.minimumCaptionScore,
+          minimumScoreOccurrence: options.minimumCaptionScoreOccurrence,
+          maximumOccurrenceCount: options.maximumCaptionCount
+        });
+
         callback(null, {
           video,
           images,
           face_detection: peopleNameToOccurrences,
           image_keywords: keywordToOccurrences,
+          microsoft_tags: microsoftTagToOccurrences,
+          microsoft_captions: microsoftCaptionToOccurrences
         });
       },
       // get the video transcript

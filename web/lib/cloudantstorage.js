@@ -246,6 +246,7 @@ function CloudandStorage(options) {
       (image, callback) => {
         console.log('Removing analysis from image...');
         delete image.analysis;
+        delete image.microsoft_analysis;
         visionDb.insert(image, (err, body) => {
           callback(err, body);
         });
@@ -556,6 +557,7 @@ function CloudandStorage(options) {
       (images, callback) => {
         images.forEach((image) => {
           delete image.analysis;
+          delete image.microsoft_analysis;
         });
         const toBeUpdated = {
           docs: images
