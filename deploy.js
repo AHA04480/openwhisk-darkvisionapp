@@ -167,7 +167,7 @@ function install(ow) {
         osPassword: process.env.OS_PASSWORD || '',
         osDomainId: process.env.OS_DOMAIN_ID || '',
         microsoftComputerVisionUrl: process.env.MICROSOFT_COMPUTER_VISION_URL,
-        microsoftComputerVisionKey: process.env.MICROSOFT_COMPUTER_VISION_KEY
+        microsoftComputerVisionKey: process.env.MICROSOFT_COMPUTER_VISION_KEY,
       };
       call(ow, 'package', 'update', {
         packageName: 'vision',
