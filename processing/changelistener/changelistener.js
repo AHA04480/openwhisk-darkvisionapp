@@ -110,6 +110,12 @@ function onDocumentChange(url, dbName, documentId, documentRev, callback) {
       return;
     }
 
+    if (doc.type === 'image' && mediaStorage.hasAttachment(doc, 'image.jpg') && !doc.microsoft_analysis) {
+      // trigger the microsoft_analysis
+      asyncCallAction('vision/microsoft_analysis', doc, callback);
+      return;
+    }
+
     // nothing to do with this change
     console.log('[', doc._id, '] OK - ignored event for doc type:', doc.type);
     callback(null, { ok: true, ignored: true });

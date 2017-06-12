@@ -166,6 +166,8 @@ function install(ow) {
         osUsername: process.env.OS_USERNAME || '',
         osPassword: process.env.OS_PASSWORD || '',
         osDomainId: process.env.OS_DOMAIN_ID || '',
+        microsoftComputerVisionUrl: process.env.MICROSOFT_COMPUTER_VISION_URL,
+        microsoftComputerVisionKey: process.env.MICROSOFT_COMPUTER_VISION_KEY
       };
       call(ow, 'package', 'update', {
         packageName: 'vision',
@@ -240,6 +242,7 @@ function install(ow) {
     makeChangeListenerTask(ow, true),
     makeActionTask(ow, 'textanalysis', true),
     makeActionTask(ow, 'analysis', true),
+    makeActionTask(ow, 'microsoft_analysis', true),
     makeSpeechToTextTask(ow, true),
     //   wsk rule create vision-rule vision-cloudant-trigger vision-cloudant-changelistener
     (callback) => {
