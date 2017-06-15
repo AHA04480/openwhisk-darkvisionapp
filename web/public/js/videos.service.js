@@ -25,6 +25,15 @@
         });
         return deferred.promise;
       },
+      allPlayers: function () {
+        var deferred = $q.defer();
+        $http.get("/api/videos/players").then(function(response) { return response.data; }).then(function (data) {
+          deferred.resolve(data);
+        }).catch(function () {
+          deferred.reject();
+        });
+        return deferred.promise;
+      },
       get: function (videoId) {
         var deferred = $q.defer();
         $http.get("/api/videos/" + encodeURIComponent(videoId)).then(function(response) { return response.data; }).then(function (data) {

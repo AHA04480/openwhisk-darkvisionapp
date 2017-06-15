@@ -1,0 +1,127 @@
+<!--
+// Licensed under the Apache License. See footer for details.
+-->
+<div flex class="player-container" ng-controller="PlayerController as controller" layout="row" ng-cloak>
+
+  <div flex layout="column">
+    <div class="header border-box" layout="row" layout-align="center center">
+      <div class="breadcrumb">
+        <a ui-sref="home()">
+          <md-icon md-font-library="material-icons">arrow_back</md-icon>
+          All Uploads
+        </a>
+      </div>
+      <div flex class="video-title border-box">
+        {{controller.data.video.title}}
+      </div>
+      <div>
+        <md-menu ng-if="controller.isVideo()">
+          <md-button class="video-menu-button md-icon-button" ng-click="$mdMenu.open()">
+            <md-icon md-font-library="material-icons">more_vert</md-icon>
+          </md-button>
+          <md-menu-content>
+            <md-menu-item>
+              <md-button ng-click="controller.resetImages()">
+                Reset All Images
+              </md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-button ng-click="controller.resetAudio()">
+                Reset Audio
+              </md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-button ng-click="controller.reset()">
+                Relaunch Video Analysis
+              </md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+              <md-button ng-click="controller.delete()">
+                Delete Video
+              </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+        <md-menu ng-if="!controller.isVideo()">
+          <md-button class="video-menu-button md-icon-button" ng-click="$mdMenu.open()">
+            <md-icon md-font-library="material-icons">more_vert</md-icon>
+          </md-button>
+          <md-menu-content>
+            <md-menu-item>
+              <md-button ng-click="controller.reset()">
+                Relaunch Image Analysis
+              </md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+              <md-button ng-click="controller.delete()">
+                Delete Image
+              </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </div>
+    </div>
+
+    <div flex layout="row">
+      <div class="video-contents" flex layout="column">
+        <h3>Video Player</h3>
+        <div class="player videogular-container" flex layout="row">
+          <videogular vg-theme="controller.config.theme">
+            <vg-media vg-src="controller.config.sources"
+                vg-tracks="controller.config.tracks">
+            </vg-media>
+            <vg-controls>
+              <vg-play-pause-button></vg-play-pause-button>
+              <vg-time-display>{{ currentTime | date:'mm:ss' }}</vg-time-display>
+              <vg-scrub-bar>
+                <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+              </vg-scrub-bar>
+              <vg-time-display>{{ timeLeft | date:'mm:ss' }}</vg-time-display>
+              <vg-volume>
+                <vg-mute-button></vg-mute-button>
+                <vg-volume-bar></vg-volume-bar>
+              </vg-volume>
+              <vg-fullscreen-button></vg-fullscreen-button>
+            </vg-controls>
+
+            <vg-overlay-play></vg-overlay-play>
+            <vg-poster vg-url='controller.config.plugins.poster'></vg-poster>
+          </videogular>
+        </div>
+        <h3>Video Metadata</h3>
+        <div class="metadata" flex layout="row">
+          ......
+        </div>
+      </div>
+
+
+      <div class="insights" flex layout="column">
+        <h3>Insights</h3>
+        <div>
+          ....
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+
+</div>
+<!--
+//------------------------------------------------------------------------------
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//------------------------------------------------------------------------------
+-->

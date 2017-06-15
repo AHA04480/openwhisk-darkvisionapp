@@ -38,7 +38,7 @@
     };
 
     controller.reloadImages = function() {
-      ImagesService.all().then(function (images) {
+      ImagesService.all().then(function(images) {
         controller.data.images = images;
       });
     };

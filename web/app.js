@@ -270,6 +270,42 @@ app.get('/api/videos', (req, res) => {
 });
 
 /**
+ * Returns an video attachment for a given video id.
+ *
+ * To reduce the load on the storage, images are cached locally.
+ */
+app.get('/videos/contents/:id.mp4', (req, res) => {
+  const cacheKey = `${encodeURIComponent(req.params.id)}.mp4`;
+  const videoFilename = `${imageCacheDirectory}/${cacheKey}`;
+  if (imageCache.get(cacheKey)) {
+    // cache hit, send the file
+    res.sendFile(videoFilename);
+  } else {
+    const mediaStream = mediaStorage.read(req.params.id, 'video.mp4');
+    const videoFile = fs.createWriteStream(videoFilename);
+    mediaStream.on('response', (response) => {
+      // get the VideoPlayer from the storage
+      if (response.statusCode !== 200) {
+        res.status(response.statusCode).send({ ok: false });
+      } else {
+        // save the VideoPlayer to disk
+        mediaStream
+          .pipe(videoFile)
+          .on('finish', () => {
+            console.log('video cached at', videoFilename);
+            res.sendFile(videoFilename);
+            imageCache.set(cacheKey, true);
+          })
+          .on('error', (err) => {
+            console.log('Can not cache video', err);
+            res.status(500).send({ ok: false });
+          });
+      }
+    });
+  }
+});
+
+/**
  * Returns a summary of the results for one video.
  * It collects all images and their analysis and keeps only the most relevants.
  */
@@ -613,6 +649,50 @@ app.delete('/api/videos/:id', checkForAuthentication, (req, res) => {
     }
   });
 });
+
+
+//-------------------------------------------
+//ビデオプレーヤー用に追加
+//-------------------------------------------
+
+/**
+ * Returns an video stream for a given video or image id.
+ *
+ * To reduce the load on the storage, images are cached locally.
+ */
+/*
+app.get('/video-player/:type/:id.mp4', (req, res) => {
+
+  const cacheKey = `${encodeURIComponent(req.params.type)}-${encodeURIComponent(req.params.id)}.mp4`;
+  const imageFilename = `${imageCacheDirectory}/${cacheKey}`;
+  //if (imageCache.get(cacheKey)) {
+    // cache hit, send the file
+  //  res.sendFile(imageFilename);
+  //} else {
+    const mediaStream = mediaStorage.read(req.params.id, `${req.params.type}.mp4`);
+    const imageFile = fs.createWriteStream(imageFilename);
+    mediaStream.on('response', (response) => {
+      // get the image from the storage
+      if (response.statusCode !== 200) {
+        res.status(response.statusCode).send({ ok: false });
+      } else {
+        // save the image to disk
+        mediaStream
+          .pipe(imageFile)
+          .on('finish', () => {
+            console.log('Image cached at', imageFilename);
+            res.sendFile(imageFilename);
+            imageCache.set(cacheKey, true);
+          })
+          .on('error', (err) => {
+            console.log('Can not cache image', err);
+            res.status(500).send({ ok: false });
+          });
+      }
+    });
+  //}
+});
+*/
 
 // Protects the upload zone with login and password if they are configured
 app.use('/upload', checkForAuthentication);
