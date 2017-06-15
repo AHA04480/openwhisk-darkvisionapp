@@ -17,8 +17,14 @@
     var controller = this;
 
     controller.data = {
-      'videoId': $stateParams.videoId,
-      'playerUrl': '/videos/contents/' + $stateParams.videoId + '.mp4'
+      images: null,
+      summary: null,
+      selected: null,
+      selectedSummary: null,
+      videoId: $stateParams.videoId,
+      playerUrl: '/videos/contents/' + $stateParams.videoId + '.mp4',
+      currentTime: null,
+      playerState: null
     };
 
     controller.config = {
@@ -41,6 +47,22 @@
       }
       */
     };
+
+    controller.API = null;
+    controller.playerReady = function(API) {
+      console.log('onPlayerReady');
+      controller.API = API;
+    };
+
+    controller.updateTime = function($currentTime,$duration){
+      console.log('updateTime ' + $currentTime);
+      controller.data.currentTime = $currentTime;
+    };
+
+    controller.updateState = function($state){
+      console.log('updateState ' + $state);
+      controller.data.playerState = $state
+    }
 
     VideosService.get($stateParams.videoId).then(function (summary) {
       controller.data.images = summary.images;

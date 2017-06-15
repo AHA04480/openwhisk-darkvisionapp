@@ -3,6 +3,10 @@ applications:
   - cloudant-for-darkvision
 #  - objectstorage-for-darkvision
   name: openwhisk-darkvision
+  host: openwhisk-darkvision-shimac-19374
   memory: 256M
   instances: 1
-  random-route: true
+  env:
+    ADMIN_PASSWORD: "movieuser"
+    ADMIN_USERNAME: "movieuser"
+    CLOUDANT_db: "openwhisk-darkvision"
