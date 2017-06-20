@@ -38,6 +38,11 @@
     'ui.router',
     'angularCSS',
     'ngFileUpload',
+    'ngSanitize',
+    'com.2fdevs.videogular',
+    'com.2fdevs.videogular.plugins.controls',
+    'com.2fdevs.videogular.plugins.overlayplay',
+    'com.2fdevs.videogular.plugins.poster'
   ]);
 
   app.config(function($stateProvider, $urlRouterProvider) {
@@ -64,6 +69,14 @@
         templateUrl: 'routes/video/video.html',
         css: 'routes/video/video.css',
       });
+
+    $stateProvider
+      .state('player', {
+        url: '/players/:videoId',
+        templateUrl: 'routes/player/player.html',
+        css: 'routes/player/player.css',
+      });
+
   });
 
   app.config(function($mdProgressCircularProvider) {
