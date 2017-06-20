@@ -28,6 +28,14 @@ stages:
     value: ASecret{{name}}4Dv
   - name: USE_API_CACHE
     value: ""
+  - name: STT_CUSTOMIZATION_ID
+    value: ""
+  - name: VR_CLASSIFIER_IDS
+    value: ""
+  - name: MICROSOFT_COMPUTER_VISION_URL
+    value: ""
+  - name: MICROSOFT_COMPUTER_VISION_KEY
+    value: ""
   jobs:
   - name: Deploy
     type: deployer
